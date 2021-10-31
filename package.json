@@ -1,6 +1,6 @@
 {
   "name": "rinkeby-forest",
-  "homepage": "http://rinkebyforest.dantemonaldo.com/",
+  "homepage": "https://rinkebyforest.dantemonaldo.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
