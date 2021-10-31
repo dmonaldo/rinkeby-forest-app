@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://rinkebyforest.dantemonaldo.com/precache-manifest.0de69aff66e1145309230f3965c9438c.js"
+  "https://rinkebyforest.dantemonaldo.com/precache-manifest.56eab2a73c7939b90d8cbc75d3c5a1a6.js"
 );
 
 self.addEventListener('message', (event) => {
