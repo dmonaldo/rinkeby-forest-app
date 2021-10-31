@@ -14,7 +14,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "echo 'rinkebyforest.dantemonaldo.com' > gh-pages -d build -b gh-pages",
+    "deploy": "echo 'rinkebyforest.dantemonaldo.com' > ./build/CNAME && gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
