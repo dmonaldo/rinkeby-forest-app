@@ -66,7 +66,6 @@ const App = () => {
 
         let count = await treePortalContract.getTotalTrees();
         console.log("Retrieved total tree count...", count.toNumber());
-        console.log("message", message)
         const plantTxn = await treePortalContract.plant(message, { gasLimit: 300000 });
         console.log("Mining...", plantTxn.hash);
 
