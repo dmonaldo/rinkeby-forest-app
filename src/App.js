@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import './App.css';
 import abi from "./utils/TreePortal.json";
 
+const ETHEREUM_NETWORK = "rinkeby";
 
 const App = () => {
   const [isPendingTransaction, setIsPendingTransaction] = useState(false);
@@ -12,7 +13,17 @@ const App = () => {
   const contractAddress = "0x9a7A04F79c402e29cf946E828c6d0098Ca5247d7";
   const contractABI = abi.abi;
 
-  const checkIfWalletIsConnected = async () => {
+  // enfore rinkeby network
+  const checkNetwork = useCallback(async (ethereum) => {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const network = await provider.getNetwork();
+
+    if (network.name !== ETHEREUM_NETWORK)
+      throw Error("Must connect using the Rinkeby network");
+  }, []);
+
+
+  const checkIfWalletIsConnected = useCallback(async () => {
     try {
       const { ethereum } = window;
 
@@ -23,17 +34,20 @@ const App = () => {
 
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
+      await checkNetwork(ethereum);
+
       if (accounts.length !== 0) {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account);
       } else {
-        console.log("No authorized account found");
+        console.log("No authorized MetaMask account found");
       }
     } catch(err) {
       console.log(err);
     }
-  }
+  }, [checkNetwork]);
+
 
   const connectWallet = async () => {
     try {
@@ -54,10 +68,13 @@ const App = () => {
     }
   }
 
+
   const plant = async (message) => {
     setIsPendingTransaction(true);
     try {
       const { ethereum } = window;
+
+      await checkNetwork(ethereum);
 
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
@@ -72,20 +89,19 @@ const App = () => {
         await plantTxn.wait();
         console.log("Mined -- ", plantTxn.hash);
 
-        // count = await treePortalContract.getTotalTrees();
-        // console.log("Retrieved total tree count...", count.toNumber());
         setMessage("");
       } else {
         console.log("Ethereum object doesn't exist");
       }
     } catch(err) {
       console.log(err);
-      alert("Transaction failed")
+      alert(JSON.stringify(err))
     }
     setIsPendingTransaction(false)
   }
 
-  const getAllTrees = async () => {
+
+  const getAllTrees = useCallback(async () => {
     try {
       const { ethereum } = window;
 
@@ -112,7 +128,8 @@ const App = () => {
     } catch(err) {
       console.log(err);
     }
-  }
+  }, [contractABI]);
+
 
   useEffect(() => {
     let treePortalContract;
@@ -132,9 +149,7 @@ const App = () => {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-
       treePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-      console.log(treePortalContract)
       treePortalContract.on('NewTree', onNewTree);
     }
 
@@ -143,35 +158,20 @@ const App = () => {
         treePortalContract.off('NewTree', onNewTree);
       }
     }
-  }, []);
-
-  const countTrees = async () => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const treePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-
-        let count = await treePortalContract.getTotalTrees();
-        console.log("Retrieved total tree count...", count.toNumber());
-      } else {
-        console.log("Ethereum object doesn't exist");
-      }
-    } catch(err) {
-      console.log(err);
-    }
-  }
+  }, [contractABI]);
 
   const viewAddress = (address) => {
     window.open("https://rinkeby.etherscan.io/address/"+address);
   }
 
+
   useEffect(() => {
     checkIfWalletIsConnected();
-    getAllTrees();
-  }, [])
+
+    if (currentAccount)
+      getAllTrees();
+  }, [getAllTrees, currentAccount, checkIfWalletIsConnected]);
+
 
   return (
     <div className="mainContainer">
@@ -212,7 +212,9 @@ const App = () => {
           {allTrees.map((tree, index) => {
             return (
               <div className="planted tooltip" key={index}>
-                <button className="emoji" onClick={() => {viewAddress(tree.address)}}>🌲</button>
+                <button className="emoji" onClick={() => {viewAddress(tree.address)}}>
+                  <span role="img" aria-label="tree">🌲</span>
+                </button>
                 <div className="tooltiptext">
                   {tree.address}<br/><br/>
                   {tree.message}<br/><br/>

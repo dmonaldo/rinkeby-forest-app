@@ -86,7 +86,6 @@ input[type=text]:focus{
 .spinnerContainer {
   position: relative;
   margin-top: 20px;
-  /* height: 60px; */
 }
 
 .spinner:before {
