@@ -4,13 +4,13 @@ import './App.css';
 import abi from "./utils/TreePortal.json";
 
 const ETHEREUM_NETWORK = "rinkeby";
+const CONTRACT_ADDRESS = "0x9a7A04F79c402e29cf946E828c6d0098Ca5247d7";
 
 const App = () => {
   const [isPendingTransaction, setIsPendingTransaction] = useState(false);
   const [currentAccount, setCurrentAccount] = useState("");
   const [allTrees, setAllTrees] = useState([]);
   const [message, setMessage] = useState("");
-  const contractAddress = "0x9a7A04F79c402e29cf946E828c6d0098Ca5247d7";
   const contractABI = abi.abi;
 
   // enfore rinkeby network
@@ -79,7 +79,7 @@ const App = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        const treePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const treePortalContract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
         let count = await treePortalContract.getTotalTrees();
         console.log("Retrieved total tree count...", count.toNumber());
@@ -108,7 +108,7 @@ const App = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        const treePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const treePortalContract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
         const trees = await treePortalContract.getAllTrees();
 
@@ -149,7 +149,7 @@ const App = () => {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      treePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+      treePortalContract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
       treePortalContract.on('NewTree', onNewTree);
     }
 
