@@ -1,0 +1,139 @@
+div {
+  color: white;
+}
+
+div, input, button {
+  animation: fadein cubic-bezier(0.4, 0, 0.2, 1) 800ms;
+}
+
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 64px;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.header {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.bio {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+.messageInput {
+  margin: 32px 0 64px 0;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  padding: 16px;
+  border: 0;
+  border-radius: 5px;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  font-size: 16px;
+}
+
+button:hover {
+  background: linear-gradient(to bottom, #8aff8a 1%, #8aff8a 8%,#018501 100%);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+input[type=text] {
+  border: 0;
+  border-radius: 5px;
+  padding: 16px;
+  margin: 12px;
+  outline: none;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  font-size: 16px;
+  width: 50%;
+}
+
+input[type=text]:focus{
+  border-color:dodgerBlue;
+  box-shadow:0 0 8px 0 dodgerBlue;
+}
+
+@keyframes fadein {
+    from {
+        transform: translateY(50%);
+        opacity:0;
+    }
+    to {
+        transform: translateY(0);
+        opacity:1;
+    }
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+ 
+.spinnerContainer {
+  position: relative;
+  margin-top: 20px;
+  /* height: 60px; */
+}
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: -40px;
+  border-radius: 50%;
+  border-top: 3px solid #fff;
+  border-right: 3px solid transparent;
+  animation: spinner 1s linear infinite;
+}
+
+a {
+  color: #fff;
+}
+
+.planted {
+  position: relative;
+  display: inline;
+  margin: 8px;
+}
+
+.emoji {
+  font-size: 64px;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.planted .tooltiptext {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 5px;
+  margin-top: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.planted:hover .tooltiptext {
+  visibility: visible;
+}
