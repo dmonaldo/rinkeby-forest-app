@@ -18,6 +18,7 @@ div, input, button {
   flex-direction: column;
   justify-content: center;
   max-width: 600px;
+  padding: 0 20px;
 }
 
 .header {
@@ -44,6 +45,7 @@ button {
   border-radius: 5px;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   font-size: 16px;
+  color: #000;
 }
 
 button:hover {
